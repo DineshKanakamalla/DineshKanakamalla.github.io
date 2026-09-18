@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { CATEGORIES, type CategoryKey } from '@/lib/categories';
+
+export async function getStaticPaths() {
+  return (Object.keys(CATEGORIES) as CategoryKey[]).map((category) => ({
+    params: { category },
+    props: { category },
+  }));
+}
+
+interface Props { category: CategoryKey }
+const { category } = Astro.props;
+const c = CATEGORIES[category];
+const posts = (await getCollection('posts', ({ data }) => !data.draft && data.category === category))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title={`${c.label} — Embedded Journal`} description={c.blurb}>
+  <div class="mx-auto max-w-6xl px-6 pt-16 pb-24">
+    <header class="mb-12 max-w-2xl">
+      <div class="text-5xl mb-4" style={`color:${c.color}`}>{c.glyph}</div>
+      <h1 class="text-4xl font-semibold tracking-tight mb-3">{c.label}</h1>
+      <p class="text-lg text-[--color-muted]">{c.blurb}</p>
+      <p class="mt-4 text-xs font-mono text-[--color-subtle]">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+    </header>
+    {posts.length === 0 ? (
+      <div class="rounded-xl border border-dashed border-[--color-border] p-12 text-center text-[--color-muted]">
+        Nothing here yet. First post lands soon.
+      </div>
+    ) : (
+      <div class="grid md:grid-cols-2 gap-4">
+        {posts.map(post => <PostCard post={post} />)}
+      </div>
+    )}
+  </div>
+</BaseLayout>

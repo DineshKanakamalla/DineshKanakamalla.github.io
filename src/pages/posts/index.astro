@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="All posts — Embedded Journal">
+  <div class="mx-auto max-w-6xl px-6 pt-16 pb-24">
+    <header class="mb-12">
+      <div class="text-xs font-mono uppercase tracking-widest text-[--color-subtle] mb-3">Archive</div>
+      <h1 class="text-4xl font-semibold tracking-tight mb-3">All posts</h1>
+      <p class="text-[--color-muted]">{posts.length} posts, sorted newest first.</p>
+    </header>
+    <div class="grid md:grid-cols-2 gap-4">
+      {posts.map((post, i) => (
+        <div class="fade-in-up" style={`animation-delay: ${Math.min(i * 0.05, 0.3)}s`}>
+          <PostCard post={post} />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

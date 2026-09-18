@@ -1,0 +1,73 @@
+---
+interface Heading { depth: number; slug: string; text: string }
+interface Props { headings: Heading[] }
+const { headings } = Astro.props;
+const items = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+{items.length > 0 && (
+  <nav aria-label="Table of contents" class="text-sm">
+    <div class="text-[10px] uppercase tracking-widest text-[--color-subtle] font-mono mb-4">On this page</div>
+    <ul class="space-y-1 border-l border-[--color-border]">
+      {items.map(h => (
+        <li>
+          <a
+            href={`#${h.slug}`}
+            data-toc-link={h.slug}
+            class:list={[
+              'group flex items-center gap-2 py-1 text-[--color-muted] hover:text-[--color-text] transition-colors duration-150 border-l-2 -ml-px',
+              h.depth === 3 ? 'pl-6' : 'pl-3',
+              'border-transparent',
+            ]}
+          >
+            <span class:list={[
+              'w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200',
+              'bg-[--color-border-hi] group-hover:bg-[--color-muted]',
+            ]} data-toc-dot={h.slug}></span>
+            <span class="truncate">{h.text}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+  if (links.length) {
+    const slugs = links.map((l) => l.dataset.tocLink!);
+    const headings = slugs
+      .map((s) => document.getElementById(s))
+      .filter((el): el is HTMLElement => !!el);
+
+    const setActive = (id: string | null) => {
+      links.forEach((l) => {
+        const active = l.dataset.tocLink === id;
+        const dot = l.querySelector('[data-toc-dot]') as HTMLElement;
+        l.classList.toggle('text-[--color-signal]', active);
+        l.classList.toggle('border-[--color-signal]', active);
+        l.classList.toggle('text-[--color-text]', active);
+        l.classList.toggle('border-transparent', !active);
+        l.classList.toggle('text-[--color-muted]', !active);
+        if (dot) {
+          dot.classList.toggle('bg-[--color-signal]', active);
+          dot.classList.toggle('bg-[--color-border-hi]', !active);
+          dot.classList.toggle('w-1.5', !active);
+          dot.classList.toggle('w-2', active);
+          dot.classList.toggle('h-1.5', !active);
+          dot.classList.toggle('h-2', active);
+        }
+      });
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-80px 0px -70% 0px', threshold: [0, 1] }
+    );
+    headings.forEach((h) => io.observe(h));
+  }
+</script>

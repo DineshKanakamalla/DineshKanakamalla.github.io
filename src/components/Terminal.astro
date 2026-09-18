@@ -1,0 +1,15 @@
+---
+interface Props { title?: string }
+const { title = 'terminal' } = Astro.props;
+---
+<div class="my-8 rounded-xl border border-[--color-border] bg-[#0b0b0f] overflow-hidden shadow-[var(--shadow-card)]">
+  <div class="flex items-center gap-2 px-4 py-2.5 border-b border-[--color-border]">
+    <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f57] shadow-[0_0_4px_#ff5f57]"></span>
+    <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e] shadow-[0_0_4px_#febc2e]"></span>
+    <span class="w-2.5 h-2.5 rounded-full bg-[#28c840] shadow-[0_0_4px_#28c840]"></span>
+    <span class="ml-3 text-xs font-mono text-[--color-subtle]">{title}</span>
+  </div>
+  <div class="p-4 font-mono text-[13px] leading-relaxed text-[#e7e7ea] [&_.cmd]:text-[#22d3ee] [&_.cmd::before]:content-['$_'] [&_.cmd::before]:text-[#5a5a63] [&_.cmd::before]:mr-2 [&_.out]:text-[#8b8b94] [&_p]:my-1">
+    <slot />
+  </div>
+</div>

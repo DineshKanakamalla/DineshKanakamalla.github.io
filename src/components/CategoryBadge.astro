@@ -1,0 +1,17 @@
+---
+import { CATEGORIES, CATEGORY_ICONS, type CategoryKey } from '@/lib/categories';
+interface Props { category: CategoryKey; asLink?: boolean }
+const { category, asLink = true } = Astro.props;
+const c = CATEGORIES[category];
+const icon = CATEGORY_ICONS[category];
+const Tag = asLink ? 'a' : 'span';
+const href = asLink ? `/categories/${category}` : undefined;
+---
+<Tag
+  href={href}
+  class="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-full border transition-all duration-200 hover:brightness-110 hover:shadow-[0_0_8px_var(--color-signal-dim)]"
+  style={`color:${c.color};border-color:${c.color}40;background:${c.color}0d`}
+>
+  <span aria-hidden="true" class="shrink-0 [&>svg]:w-[14px] [&>svg]:h-[14px]" set:html={icon} />
+  {c.label}
+</Tag>

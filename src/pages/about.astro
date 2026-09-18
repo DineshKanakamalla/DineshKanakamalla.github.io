@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
+import { CATEGORIES, CATEGORY_ICONS, type CategoryKey } from '@/lib/categories';
+
+const categoryOrder: CategoryKey[] = ['os', 'embedded-linux', 'rtos', 'networking', 'wifi', 'misc'];
+---
+
+<BaseLayout title="About — Embedded Journal">
+  <div class="mx-auto max-w-3xl px-6 pt-16 pb-24">
+    <header class="mb-12">
+      <div class="text-xs font-mono uppercase tracking-widest text-[--color-subtle] mb-3">About</div>
+      <h1 class="text-4xl font-semibold tracking-tight">Hi — I write about the parts of embedded systems that don't fit in a datasheet.</h1>
+    </header>
+
+    <div class="mb-10">
+      <AuthorCard />
+    </div>
+
+    <div class="prose-custom">
+      <p>
+        I'm an embedded engineer. I've spent enough time shipping firmware, fighting Yocto,
+        debugging MAC/PHY bring-up, and reading RTOS source to know that the interesting
+        parts are almost never in the "getting started" guide.
+      </p>
+      <p>
+        This blog is where I document what I learn — the real numbers, the failure modes,
+        the stuff that takes hours to figure out and seconds to forget if you don't write it down.
+      </p>
+
+      <h2>What you'll find</h2>
+      <div class="grid gap-3 sm:grid-cols-2 my-6">
+        {categoryOrder.map((key) => {
+          const c = CATEGORIES[key];
+          const icon = CATEGORY_ICONS[key];
+          return (
+            <a href={`/categories/${key}`} class="flex items-start gap-3 p-4 rounded-xl border border-[--color-border] bg-[--color-surface] hover:border-[--color-border-hi] hover:bg-[--color-elevated] transition-all group">
+              <div class="shrink-0 mt-0.5" style={`color:${c.color}`} set:html={icon} />
+              <div>
+                <div class="font-medium text-sm group-hover:text-[--color-signal] transition-colors">{c.label}</div>
+                <div class="text-xs text-[--color-muted] leading-relaxed mt-0.5">{c.blurb}</div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <h2>Get in touch</h2>
+      <p>
+        Corrections, questions, or "hey I tried this and it broke differently" — all welcome.
+        Reach me at <a href="mailto:dineshkanakamalla078@gmail.com">dineshkanakamalla078@gmail.com</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111113"/>
+      <stop offset="100%" stop-color="#0c0c0e"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="shadow1" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="numGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowCyan" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#52525b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" rx="16" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="44" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#52525b" letter-spacing="0.15em" text-transform="uppercase">ROAMING DECISION CYCLE</text>
+
+  <!-- Phase 1: DETECT -->
+  <g filter="url(#shadow1)">
+    <rect x="180" y="70" width="440" height="96" rx="14" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <rect x="180" y="70" width="440" height="96" rx="14" fill="#22d3ee" fill-opacity="0.06"/>
+  </g>
+  <!-- Number circle -->
+  <circle cx="220" cy="118" r="18" fill="url(#cyan)" filter="url(#numGlow)"/>
+  <text x="220" y="123" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#09090b">1</text>
+  <!-- Text -->
+  <text x="256" y="106" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#52525b" letter-spacing="0.12em">PHASE</text>
+  <text x="256" y="130" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#fafafa">DETECT</text>
+  <text x="540" y="118" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">RSSI drops below</text>
+  <text x="540" y="136" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">threshold</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="400" y1="166" x2="400" y2="200" stroke="#22d3ee" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+  <!-- Phase 2: DISCOVER -->
+  <g filter="url(#shadow1)">
+    <rect x="180" y="208" width="440" height="96" rx="14" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <rect x="180" y="208" width="440" height="96" rx="14" fill="#22d3ee" fill-opacity="0.06"/>
+  </g>
+  <circle cx="220" cy="256" r="18" fill="url(#cyan)" filter="url(#numGlow)"/>
+  <text x="220" y="261" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#09090b">2</text>
+  <text x="256" y="244" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#52525b" letter-spacing="0.12em">PHASE</text>
+  <text x="256" y="268" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#fafafa">DISCOVER</text>
+  <text x="540" y="256" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">Multicast probe to</text>
+  <text x="540" y="274" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">peer APs</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="400" y1="304" x2="400" y2="338" stroke="#22d3ee" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+  <!-- Phase 3: DECIDE -->
+  <g filter="url(#shadow1)">
+    <rect x="180" y="346" width="440" height="96" rx="14" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <rect x="180" y="346" width="440" height="96" rx="14" fill="#22d3ee" fill-opacity="0.06"/>
+  </g>
+  <circle cx="220" cy="394" r="18" fill="url(#cyan)" filter="url(#numGlow)"/>
+  <text x="220" y="399" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#09090b">3</text>
+  <text x="256" y="382" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#52525b" letter-spacing="0.12em">PHASE</text>
+  <text x="256" y="406" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#fafafa">DECIDE</text>
+  <text x="540" y="394" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">Best candidate</text>
+  <text x="540" y="412" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">selected</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="400" y1="442" x2="400" y2="476" stroke="#22d3ee" stroke-width="2" marker-end="url(#arrowCyan)"/>
+
+  <!-- Phase 4: STEER -->
+  <g filter="url(#shadow1)">
+    <rect x="180" y="484" width="440" height="96" rx="14" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+    <rect x="180" y="484" width="440" height="96" rx="14" fill="#22d3ee" fill-opacity="0.06"/>
+  </g>
+  <circle cx="220" cy="532" r="18" fill="url(#cyan)" filter="url(#numGlow)"/>
+  <text x="220" y="537" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="700" fill="#09090b">4</text>
+  <text x="256" y="520" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#52525b" letter-spacing="0.12em">PHASE</text>
+  <text x="256" y="544" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#fafafa">STEER</text>
+  <text x="540" y="532" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">802.11v BTM sent</text>
+  <text x="540" y="550" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#a1a1aa">to client</text>
+
+  <!-- Return loop arrow (right side) -->
+  <path d="M 636 532 L 700 532 L 700 118 L 636 118" stroke="#52525b" stroke-width="1.5" stroke-dasharray="8 5" fill="none" marker-end="url(#arrowGray)"/>
+  <!-- Return label -->
+  <text x="718" y="332" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#52525b" writing-mode="tb" letter-spacing="0.08em">CONTINUOUS LOOP</text>
+</svg>

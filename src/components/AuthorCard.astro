@@ -1,0 +1,20 @@
+---
+const author = {
+  name: 'Dinesh Kanakamalla',
+  role: 'Embedded Systems Engineer',
+  bio: 'Building firmware, fighting silicon, documenting the failure modes.',
+  avatar: null as string | null,
+};
+const initials = author.name.split(' ').map(n => n[0]).join('');
+---
+
+<div class="flex items-start gap-4 p-5 rounded-xl border border-[--color-border] bg-[--color-surface]">
+  <div class="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-[--color-signal] to-[--color-signal-dim] flex items-center justify-center text-[#09090b] font-mono font-bold text-sm">
+    {initials}
+  </div>
+  <div class="min-w-0">
+    <div class="font-semibold text-sm text-[--color-text]">{author.name}</div>
+    <div class="text-xs font-mono text-[--color-subtle] mb-2">{author.role}</div>
+    <p class="text-sm text-[--color-muted] leading-relaxed">{author.bio}</p>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+---
+---
+<div id="theme-toggle" class="relative flex items-center rounded-lg border border-[--color-border] bg-[--color-surface] p-0.5" role="radiogroup" aria-label="Theme selection">
+  <button
+    type="button"
+    data-theme-value="dark"
+    role="radio"
+    aria-checked="false"
+    aria-label="Dark theme"
+    class="theme-option relative z-10 flex items-center justify-center w-8 h-8 rounded-md text-[--color-muted] hover:text-[--color-text] transition-colors"
+  >
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+  <button
+    type="button"
+    data-theme-value="system"
+    role="radio"
+    aria-checked="false"
+    aria-label="System theme"
+    class="theme-option relative z-10 flex items-center justify-center w-8 h-8 rounded-md text-[--color-muted] hover:text-[--color-text] transition-colors"
+  >
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+    </svg>
+  </button>
+  <button
+    type="button"
+    data-theme-value="light"
+    role="radio"
+    aria-checked="false"
+    aria-label="Light theme"
+    class="theme-option relative z-10 flex items-center justify-center w-8 h-8 rounded-md text-[--color-muted] hover:text-[--color-text] transition-colors"
+  >
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+    </svg>
+  </button>
+  <div id="theme-indicator" class="absolute z-0 h-[calc(100%-4px)] rounded-md bg-[--color-elevated] border border-[--color-border-hi] transition-all duration-200 ease-out"></div>
+</div>
+
+<script>
+  function getStoredTheme(): string {
+    try { return localStorage.getItem('theme') ?? 'system'; } catch { return 'system'; }
+  }
+
+  function applyTheme(value: string) {
+    const html = document.documentElement;
+    if (value === 'dark') {
+      html.classList.add('dark');
+      html.classList.remove('light');
+    } else if (value === 'light') {
+      html.classList.add('light');
+      html.classList.remove('dark');
+    } else {
+      html.classList.remove('dark');
+      html.classList.remove('light');
+    }
+  }
+
+  function updateIndicator(value: string) {
+    const group = document.getElementById('theme-toggle');
+    const indicator = document.getElementById('theme-indicator');
+    if (!group || !indicator) return;
+
+    const btn = group.querySelector(`[data-theme-value="${value}"]`) as HTMLElement;
+    if (!btn) return;
+
+    const groupRect = group.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+
+    indicator.style.left = (btnRect.left - groupRect.left) + 'px';
+    indicator.style.width = btnRect.width + 'px';
+  }
+
+  function setActiveStates(value: string) {
+    document.querySelectorAll('.theme-option').forEach((btn) => {
+      const radio = btn as HTMLElement;
+      const isActive = radio.dataset.themeValue === value;
+      radio.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      radio.classList.toggle('text-[--color-text]', isActive);
+      radio.classList.toggle('text-[--color-muted]', !isActive);
+    });
+  }
+
+  function setTheme(value: string) {
+    applyTheme(value);
+    setActiveStates(value);
+    updateIndicator(value);
+    try { localStorage.setItem('theme', value); } catch {}
+  }
+
+  const initial = getStoredTheme();
+  setActiveStates(initial);
+  requestAnimationFrame(() => updateIndicator(initial));
+
+  document.querySelectorAll('.theme-option').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setTheme((btn as HTMLElement).dataset.themeValue!);
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    updateIndicator(getStoredTheme());
+  });
+
+  document.addEventListener('astro:after-swap', () => {
+    const val = getStoredTheme();
+    setActiveStates(val);
+    requestAnimationFrame(() => updateIndicator(val));
+  });
+</script>
