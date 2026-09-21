@@ -1,48 +1,32 @@
 ---
 ---
-<div id="theme-toggle" class="relative flex items-center rounded-lg border border-[--color-border] bg-[--color-surface] p-0.5" role="radiogroup" aria-label="Theme selection">
-  <button
-    type="button"
-    data-theme-value="dark"
-    role="radio"
-    aria-checked="false"
-    aria-label="Dark theme"
-    class="theme-option relative z-10 flex items-center justify-center w-8 h-8 rounded-md text-[--color-muted] hover:text-[--color-text] transition-colors"
-  >
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  </button>
-  <button
-    type="button"
-    data-theme-value="system"
-    role="radio"
-    aria-checked="false"
-    aria-label="System theme"
-    class="theme-option relative z-10 flex items-center justify-center w-8 h-8 rounded-md text-[--color-muted] hover:text-[--color-text] transition-colors"
-  >
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-    </svg>
-  </button>
-  <button
-    type="button"
-    data-theme-value="light"
-    role="radio"
-    aria-checked="false"
-    aria-label="Light theme"
-    class="theme-option relative z-10 flex items-center justify-center w-8 h-8 rounded-md text-[--color-muted] hover:text-[--color-text] transition-colors"
-  >
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-    </svg>
-  </button>
-  <div id="theme-indicator" class="absolute z-0 h-[calc(100%-4px)] rounded-md bg-[--color-elevated] border border-[--color-border-hi] transition-all duration-200 ease-out"></div>
-</div>
+<button
+  type="button"
+  id="theme-toggle"
+  class="flex items-center justify-center w-9 h-9 rounded-lg border border-[--color-border] bg-[--color-surface]/60 backdrop-blur-sm text-[--color-muted] hover:text-[--color-text] hover:border-[--color-border-hi] transition-all"
+  aria-label="Toggle theme"
+>
+  <svg data-icon-dark width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg data-icon-light class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+  </svg>
+  <svg data-icon-system class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+  </svg>
+</button>
 
 <script>
+  const ORDER = ['dark', 'light', 'system'] as const;
+  const icons: Record<string, string> = {
+    dark: 'data-icon-dark',
+    light: 'data-icon-light',
+    system: 'data-icon-system',
+  };
+
   function getStoredTheme(): string {
-    try { return localStorage.getItem('theme') ?? 'system'; } catch { return 'system'; }
+    try { return localStorage.getItem('theme') ?? 'dark'; } catch { return 'dark'; }
   }
 
   function applyTheme(value: string) {
@@ -59,55 +43,36 @@
     }
   }
 
-  function updateIndicator(value: string) {
-    const group = document.getElementById('theme-toggle');
-    const indicator = document.getElementById('theme-indicator');
-    if (!group || !indicator) return;
-
-    const btn = group.querySelector(`[data-theme-value="${value}"]`) as HTMLElement;
+  function updateIcon(value: string) {
+    const btn = document.getElementById('theme-toggle');
     if (!btn) return;
-
-    const groupRect = group.getBoundingClientRect();
-    const btnRect = btn.getBoundingClientRect();
-
-    indicator.style.left = (btnRect.left - groupRect.left) + 'px';
-    indicator.style.width = btnRect.width + 'px';
-  }
-
-  function setActiveStates(value: string) {
-    document.querySelectorAll('.theme-option').forEach((btn) => {
-      const radio = btn as HTMLElement;
-      const isActive = radio.dataset.themeValue === value;
-      radio.setAttribute('aria-checked', isActive ? 'true' : 'false');
-      radio.classList.toggle('text-[--color-text]', isActive);
-      radio.classList.toggle('text-[--color-muted]', !isActive);
+    Object.values(icons).forEach((sel) => {
+      btn.querySelector(`[${sel}]`)?.classList.add('hidden');
     });
+    btn.querySelector(`[${icons[value]}]`)?.classList.remove('hidden');
+    const label = value.charAt(0).toUpperCase() + value.slice(1);
+    btn.setAttribute('aria-label', `Theme: ${label}. Click to change.`);
   }
 
   function setTheme(value: string) {
     applyTheme(value);
-    setActiveStates(value);
-    updateIndicator(value);
+    updateIcon(value);
     try { localStorage.setItem('theme', value); } catch {}
   }
 
-  const initial = getStoredTheme();
-  setActiveStates(initial);
-  requestAnimationFrame(() => updateIndicator(initial));
+  function cycleTheme() {
+    const current = getStoredTheme();
+    const idx = ORDER.indexOf(current as any);
+    const next = ORDER[(idx + 1) % ORDER.length];
+    setTheme(next);
+  }
 
-  document.querySelectorAll('.theme-option').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      setTheme((btn as HTMLElement).dataset.themeValue!);
-    });
-  });
+  // Init
+  updateIcon(getStoredTheme());
 
-  window.addEventListener('resize', () => {
-    updateIndicator(getStoredTheme());
-  });
+  document.getElementById('theme-toggle')?.addEventListener('click', cycleTheme);
 
   document.addEventListener('astro:after-swap', () => {
-    const val = getStoredTheme();
-    setActiveStates(val);
-    requestAnimationFrame(() => updateIndicator(val));
+    updateIcon(getStoredTheme());
   });
 </script>
